@@ -18,7 +18,7 @@ SELECT name, age FROM person WHERE address = 'Kazan' and gender = 'female'
 ORDER BY age DESC;
 ```
 result:
-![alt text](image.png)
+![alt text](screen/image.png)
 
 ## Exercise 02 - First steps into SQL world
 Please make 2 syntax different select statements which return a list of pizzerias (pizzeria name and rating) with rating between 3.5 and 5 points (including limit points) and ordered by pizzeria rating.
@@ -30,14 +30,14 @@ SELECT * FROM pizzeria WHERE rating >= 3.5 and rating <= 5
 ORDER BY rating DESC;
 ```
 result with "<= and =>":
-![alt text](image-4.png)
+![alt text](screen/image-4.png)
 
 ```sql
 SELECT * FROM pizzeria WHERE rating BETWEEN 3.5 and 5
 ORDER BY name ASC;
 ```
 result with BETWEEN:
-![alt text](image-5.png)
+![alt text](screen/image-5.png)
 
 ## Exercise 03 - First steps into SQL world
 Please make a select statement which returns the person's identifiers (without duplication) who visited pizzerias in a period from 6th of January 2022 to 9th of January 2022 (including all days) or visited pizzeria with identifier 2. Also include ordering clause by person identifier in descending mode.
@@ -48,7 +48,7 @@ FROM person_visits WHERE visit_date = '2022-01-09'and pizzeria_id = 2
 order by person_id DESC
 ```
 result: 
-![alt text](image-6.png)
+![alt text](screen/image-6.png)
 
 ## Exercise 04 - First steps into SQL world
 Please make a select statement which returns one calculated field with name ‘person_information’ in one string like described in the next sample:
@@ -63,7 +63,7 @@ SELECT concat('age: ', age, 'gender: ', gender, 'address: ', address) AS person_
 FROM person 
 ```
 result:
-![alt text](image-10.png)
+![alt text](screen/image-10.png)
 
 ## Exercise 05 - First steps into SQL world
 Please make a select statement which returns person's names (based on internal query in `SELECT` clause) who made orders for the menu with identifiers 13 , 14 and 18 and date of orders should be equal 7th of January 2022. Be aware with "Denied Section" before your work.
@@ -77,7 +77,7 @@ where id IN
 )
 ```
 result:
-![alt text](image.png)
+![alt text](screen/image.png)
 
 ## Exercise 06 - First steps into SQL world
 Please use SQL construction from Exercise 05 and add a new calculated column (use column's name ‘check_name’) with a check statement (a pseudo code for this check is presented below) in the `SELECT` clause.
@@ -100,7 +100,7 @@ CASE
 		  );
 ```
 result:
-![alt text](image-1.png)
+![alt text](screen/image-1.png)
 
 ## Exercise 07 - First steps into SQL world
 Let’s apply data intervals for the `person` table. 
@@ -125,7 +125,7 @@ FROM person
 ORDER BY interval_info ASC;
 ```
 result:
-![alt text](image-2.png)
+![alt text](screen/image-2.png)
 
 ## Exercise 08 - First steps into SQL world
 Please make a SQL statement which returns all columns from the `person_order` table with rows whose identifier is an even number. The result have to order by returned identifier.
@@ -137,7 +137,7 @@ WHERE id % 2 = 0
 ORDER BY id ASC;
 ```
 result:
-![alt text](image-3.png)
+![alt text](screen/image-3.png)
 
 ## Exercise 09 - First steps into SQL world
 Please make a select statement that returns person names and pizzeria names based on the `person_visits` table with date of visit in a period from 07th of January to 09th of January 2022 (including all days) (based on internal query in `FROM` clause) .
@@ -162,4 +162,4 @@ WHERE person_visits.visit_date BETWEEN '2022-01-07' AND '2022-01-09'
 ORDER BY person.name ASC, pizzeria.name DESC;
 ```
 result:
-![alt text](image-4.png)
+![alt text](screen/image-4.png)

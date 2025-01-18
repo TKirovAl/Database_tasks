@@ -7,7 +7,7 @@ Let’s make our first task. Please make a select statement which returns all pe
 SELECT * FROM person WHERE city = 'Kazan'
 ```
 Result:
-![alt text](image-1.png)
+![alt text](screen/image-1.png)
 ### Instead of "City" I put "Address"
 
 

@@ -130,6 +130,24 @@ Please write a SQL statement which returns menu’s identifier and pizza names f
 | 1 | cheese pizza |
 | ... | ... |
 
+```sql
+SELECT 
+    id AS object_id,
+    name AS object_name
+FROM 
+    person
+UNION ALL
+SELECT 
+    id AS object_id,
+    pizza_name AS object_name
+FROM 
+    menu
+ORDER BY 
+    object_id, 
+    object_name;
+```
+![image](https://github.com/user-attachments/assets/720442eb-0d08-4ab7-bb59-3e4ebcd23d4f)
+
 
 
 ## Chapter V
@@ -153,6 +171,29 @@ Please modify a SQL statement from “exercise 00” by removing the object_id c
 | cheese pizza |
 | ... |
 
+```sql
+SELECT object_name 
+FROM (
+    SELECT name AS object_name
+    FROM person
+    
+    UNION ALL
+    
+    SELECT pizza_name AS object_name
+    FROM menu
+) AS combined_data
+ORDER BY 
+    CASE 
+        WHEN object_name IN (SELECT name FROM person) THEN 0
+        ELSE 1
+    END,
+    object_name;
+)
+```
+![image](https://github.com/user-attachments/assets/5dcf7b99-5b7a-4bb7-9628-d5d6e371a7d8)
+
+
+
 
 ## Chapter VI
 ## Exercise 02 - Duplicates or not duplicates
@@ -167,6 +208,13 @@ Please modify a SQL statement from “exercise 00” by removing the object_id c
 | SQL Syntax Construction                        | `DISTINCT`, `GROUP BY`, `HAVING`, any type of `JOINs`                                                                                              |
 
 Please write a SQL statement which returns unique pizza names from the `menu` table and orders them by pizza_name column in descending mode. Please pay attention to the Denied section.
+```sql
+SELECT DISTINCT pizza_name AS object_name
+FROM menu
+ORDER BY pizza_name DESC;
+```
+![image](https://github.com/user-attachments/assets/e16192f6-342a-46e5-ac2f-ea049e536d85)
+
 
 ## Chapter VII
 ## Exercise 03 - “Hidden” Insights
@@ -191,6 +239,21 @@ Please write a SQL statement which returns common rows for attributes order_date
 | 2022-01-04 | 3 |
 | ... | ... |
 
+```sql
+SELECT 
+    po.order_date AS action_date,
+    po.person_id
+FROM 
+    person_order po
+INNER JOIN 
+    person_visits pv ON po.person_id = pv.person_id AND po.order_date = pv.visit_date
+ORDER BY 
+    action_date ASC,
+    po.person_id DESC;
+```
+![image](https://github.com/user-attachments/assets/99728218-949c-48d7-9b8c-0982707d97a0)
+
+
 ## Chapter VIII
 ## Exercise 04 - Difference? Yep, let's find the difference between multisets.
 
@@ -205,6 +268,22 @@ Please write a SQL statement which returns common rows for attributes order_date
 | SQL Syntax Construction                        |  any type of `JOINs`                                                                                              |
 
 Please write a SQL statement which returns a difference (minus) of person_id column values with saving duplicates between `person_order` table and `person_visits` table for order_date and visit_date are for 7th of January of 2022
+
+```sql
+(
+    SELECT person_id
+    FROM person_order
+    WHERE order_date = '2022-01-07'
+)
+EXCEPT ALL
+(
+    SELECT person_id
+    FROM person_visits
+    WHERE visit_date = '2022-01-07'
+);
+```
+![image](https://github.com/user-attachments/assets/8b94e2f1-c651-4046-90ea-14cf1d9ef849)
+
 
 ## Chapter IX
 ## Exercise 05 - Did you hear about Cartesian Product?
@@ -224,6 +303,23 @@ Please write a SQL statement which returns all possible combinations between `pe
 | 1 | Anna | 16 | female | Moscow | 1 | Pizza Hut | 4.6 |
 | 1 | Anna | 16 | female | Moscow | 2 | Dominos | 4.3 |
 | ... | ... | ... | ... | ... | ... | ... | ... |
+
+```sql
+SELECT 
+    p.id AS person_id,
+    p.name AS person_name,
+    pz.id AS pizzeria_id,
+    pz.name AS pizzeria_name
+FROM 
+    person p
+CROSS JOIN 
+    pizzeria pz
+ORDER BY 
+    person_id ASC,
+    pizzeria_id ASC;
+```
+![image](https://github.com/user-attachments/assets/46b00010-4831-492b-a78d-3ca678aa1cc0)
+
 
 
 ## Chapter X
@@ -246,6 +342,25 @@ Let's return our mind back to exercise #03 and change our SQL statement to retur
 | 2022-01-01 | Andrey |
 | ... | ... |
 
+```sql
+SELECT 
+    po.order_date AS action_date,
+    p.name AS person_name
+FROM 
+    person_order po
+INNER JOIN 
+    person_visits pv ON po.person_id = pv.person_id AND po.order_date = pv.visit_date
+INNER JOIN 
+    person p ON po.person_id = p.id
+WHERE 
+    po.order_date = '2022-01-07'
+ORDER BY 
+    action_date ASC,
+    person_name DESC;
+```
+![image](https://github.com/user-attachments/assets/2dbfcca5-da11-41f1-9a6a-2a57771579f3)
+
+
 ## Chapter XI
 ## Exercise 07 - Just make a JOIN
 
@@ -266,6 +381,20 @@ Please write a SQL statement which returns the date of order from the `person_or
 | 2022-01-01 | Anna (age:16) |
 | ... | ... |
 
+```sql
+SELECT 
+    po.order_date AS order_date,
+    CONCAT(p.name, ' (', p.age, ' years old)') AS person_info
+FROM 
+    person_order po
+INNER JOIN 
+    person p ON po.person_id = p.id
+ORDER BY 
+    order_date ASC,
+    person_info ASC;
+```
+![image](https://github.com/user-attachments/assets/173fdbf0-d165-480e-933b-52ce2b370375)
+DISTINCT - delete dublicate
 
 ## Chapter XII
 ## Exercise 08 - Migrate JOIN to NATURAL JOIN
@@ -282,6 +411,20 @@ Please write a SQL statement which returns the date of order from the `person_or
 | SQL Syntax Construction                        | other type of  `JOINs`                                                                                              |
 
 Please rewrite a SQL statement from exercise #07 by using NATURAL JOIN construction. The result must be the same like for exercise #07.  
+```sql
+SELECT 
+    po.order_date AS order_date,
+    CONCAT(p.name, ' (', p.age, ' years old)') AS person_info
+FROM 
+    person_order po
+NATURAL JOIN 
+    person p
+ORDER BY 
+    order_date ASC,
+    person_info ASC;
+```
+![image](https://github.com/user-attachments/assets/90910b3e-2f79-426a-bdd1-671af84555c5)
+
 
 ## Chapter XIII
 ## Exercise 09 - IN versus EXISTS
@@ -295,6 +438,17 @@ Please rewrite a SQL statement from exercise #07 by using NATURAL JOIN construct
 | Language                        | ANSI SQL                                                                                              |
 
 Please write 2 SQL statements which return a list of pizzerias names which have not been visited by persons by using IN for 1st one and EXISTS for the 2nd one.
+
+```sql
+SELECT 
+    pz.name AS pizzeria_name
+FROM 
+    pizzeria pz
+WHERE 
+    pz.id NOT IN (SELECT DISTINCT pv.pizzeria_id FROM person_visits pv);
+```
+![image](https://github.com/user-attachments/assets/b8108017-bed3-44f3-a9ab-04b5712db92f)
+
 
 ## Chapter XIV
 ## Exercise 10 - Global JOIN
@@ -316,4 +470,25 @@ The sample result (with named columns) is provided below and yes ... please make
 | Andrey | mushroom pizza | Dominos |
 | Anna | cheese pizza | Pizza Hut |
 | ... | ... | ... |
+
+```sql
+SELECT 
+    p.name AS person_name,
+    m.pizza_name,
+    pz.name AS pizzeria_name
+FROM 
+    person_order po
+JOIN 
+    person p ON po.person_id = p.id
+JOIN 
+    menu m ON po.menu_id = m.id
+JOIN 
+    pizzeria pz ON m.pizzeria_id = pz.id
+ORDER BY 
+    person_name ASC,
+    pizza_name ASC,
+    pizzeria_name ASC;
+```
+![image](https://github.com/user-attachments/assets/c08a7c95-2e51-4f23-9332-7644b87b7e4c)
+
 
